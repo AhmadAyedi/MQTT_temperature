@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MQTT Dashboard</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
+        #temperature, #humidity { font-size: 2em; margin: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Real-Time Temperature & Humidity Dashboard</h1>
+    <div id="temperature">Temperature: --°C</div>
+    <div id="humidity">Humidity: --%</div>
+    <script>
+        const socket = io();
+        socket.on('mqtt', (data) => {
+            if (data.topic === 'esp32/temperature') {
+                document.getElementById('temperature').textContent = `Temperature: ${data.message}°C`;
+            } else if (data.topic === 'esp32/humidity') {
+                document.getElementById('humidity').textContent = `Humidity: ${data.message}%`;
+            }
+        });
+    </script>
+</body>
+</html>
